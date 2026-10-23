@@ -9,6 +9,7 @@ use App\Models\Obat;
 use App\Models\Periksa;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Events\AntrianUpdated;
 
 class PeriksaPasienController extends Controller
 {
@@ -29,18 +30,25 @@ class PeriksaPasienController extends Controller
     public function create($id)
     {
         $obats = Obat::all();
+        $daftarPoli = DaftarPoli::findOrFail($id);
+
+        $daftarPoli->update(['status' => 'diperiksa']);
+
+        broadcast(new AntrianUpdated($daftarPoli->id_jadwal, $daftarPoli->no_antrian));
+
         return view('dokter.periksa-pasien.create', compact('obats', 'id'));
     }
 
     public function store(Request $request)
     {
         $request->validate([
+            'id_daftar_poli' => 'required|exists:daftar_poli,id',
             'obat_json' => 'required',
             'catatan' => 'nullable|string',
             'biaya_periksa' => 'required|integer',
         ]);
 
-        $obatIds = json_decode($request->obat_json, true);
+        $obatIds = json_decode($request->obat_json, true) ?? [];
 
         $periksa = Periksa::create([
             'id_daftar_poli' => $request->id_daftar_poli,
@@ -56,6 +64,13 @@ class PeriksaPasienController extends Controller
                     'id_obat' => $idObat,
                 ]);
             }
+        }
+
+        $daftarPoli = DaftarPoli::find($request->id_daftar_poli);
+        if ($daftarPoli) {
+            $daftarPoli->update(['status' => 'selesai']);
+
+            broadcast(new AntrianUpdated($daftarPoli->id_jadwal, 0))->toOthers();
         }
 
         return redirect()

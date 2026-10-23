@@ -8,6 +8,7 @@ use App\Models\JadwalPeriksa;
 use App\Models\Poli;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Events\AntrianUpdated;
 
 class PoliController extends Controller
 {
@@ -26,25 +27,34 @@ class PoliController extends Controller
 
     public function submit(Request $request)
     {
-        // Hapus validasi id_pasien dari request
         $request->validate([
             'id_poli' => 'required|exists:poli,id',
             'id_jadwal' => 'required|exists:jadwal_periksa,id',
             'keluhan' => 'required|string',
         ]);
 
-        $jumlahSudahDaftar = DaftarPoli::where('id_jadwal', $request->id_jadwal)->count();
+        $pasienId = Auth::id();
 
-        DaftarPoli::create([
-            'id_pasien' => Auth::id(), // Ambil ID pasien yang sedang login secara langsung
+        // Validasi: Cek apakah pasien masih memiliki antrian aktif (belum selesai)
+        $antrianAktif = DaftarPoli::where('id_pasien', $pasienId)
+            ->whereIn('status', ['menunggu', 'diperiksa'])
+            ->exists();
+
+        if ($antrianAktif) {
+            return redirect()->back()->with('error', 'Anda masih memiliki antrian aktif. Selesaikan pemeriksaan terlebih dahulu sebelum mendaftar kembali.');
+        }
+
+        $jumlahSudahDaftar = DaftarPoli::where('id_jadwal', $request->id_jadwal)->count();
+        $noAntrianBaru = $jumlahSudahDaftar + 1;
+
+        $daftarPoli = DaftarPoli::create([
+            'id_pasien' => $pasienId,
             'id_jadwal' => $request->id_jadwal,
             'keluhan' => $request->keluhan,
-            'no_antrian' => $jumlahSudahDaftar + 1,
+            'no_antrian' => $noAntrianBaru,
+            'status' => 'menunggu',
         ]);
 
-        return redirect()
-            ->back()
-            ->with('message', 'Berhasil Mendaftar ke Poli')
-            ->with('type', 'success');
+        return redirect()->route('pasien.dashboard')->with('success', 'Berhasil Mendaftar ke Poli');
     }
 }
