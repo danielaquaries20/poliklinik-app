@@ -34,7 +34,11 @@ class PeriksaPasienController extends Controller
 
         $daftarPoli->update(['status' => 'diperiksa']);
 
-        broadcast(new AntrianUpdated($daftarPoli->id_jadwal, $daftarPoli->no_antrian));
+        try {
+            broadcast(new AntrianUpdated($daftarPoli->id_jadwal, $daftarPoli->no_antrian));
+        } catch (Throwable $e) {
+            // Log/abaikan error broadcast
+        }
 
         return view('dokter.periksa-pasien.create', compact('obats', 'id'));
     }
@@ -70,7 +74,11 @@ class PeriksaPasienController extends Controller
         if ($daftarPoli) {
             $daftarPoli->update(['status' => 'selesai']);
 
-            broadcast(new AntrianUpdated($daftarPoli->id_jadwal, 0))->toOthers();
+            try {
+                broadcast(new AntrianUpdated($daftarPoli->id_jadwal, 0));
+            } catch (Throwable $e) {
+                // Log/abaikan error broadcast
+            }
         }
 
         return redirect()
