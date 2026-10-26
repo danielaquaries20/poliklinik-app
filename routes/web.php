@@ -16,6 +16,7 @@ use App\Http\Controllers\Pasien\RiwayatPendaftaranController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Pasien\PembayaranController;
 use App\Http\Controllers\Admin\VerifikasiPembayaranController;
+use App\Http\Controllers\NotificationController;
 
 
 Route::get('/', function () {
@@ -82,5 +83,7 @@ Route::middleware(['auth', 'role:dokter'])->prefix('dokter')->group(function () 
 Route::middleware(['auth'])->group(function () {
     Route::get('/profile', [ProfileController::class, 'index'])->name('profile.index');
     Route::put('/profile/password', [ProfileController::class, 'updatePassword'])->name('profile.password.update');
+    Route::get('/notifications/{id}/read', [NotificationController::class, 'markAsRead'])->name('notifications.read');
+    Route::post('/notifications/mark-all-read', [NotificationController::class, 'markAllAsRead'])->name('notifications.markAllRead');
 });
 

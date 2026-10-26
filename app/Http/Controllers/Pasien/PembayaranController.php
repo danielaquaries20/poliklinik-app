@@ -7,6 +7,7 @@ use App\Models\Pembayaran;
 use App\Models\Periksa;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Notifications\PembayaranPasienNotification;
 
 class PembayaranController extends Controller
 {
@@ -28,26 +29,35 @@ class PembayaranController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'id_periksa' => 'required|exists:periksa,id',
+            'id_periksa'       => 'required|exists:periksa,id',
             'bukti_pembayaran' => 'required|image|mimes:jpeg,png,jpg|max:2048',
         ], [
             'bukti_pembayaran.required' => 'File bukti pembayaran wajib diunggah.',
-            'bukti_pembayaran.image' => 'File harus berupa gambar (JPEG, PNG, JPG).',
-            'bukti_pembayaran.max' => 'Ukuran gambar maksimal 2 MB.',
+            'bukti_pembayaran.image'    => 'File harus berupa gambar (JPEG, PNG, JPG).',
+            'bukti_pembayaran.max'      => 'Ukuran gambar maksimal 2 MB.',
         ]);
 
         $file = $request->file('bukti_pembayaran');
         $filename = time() . '_' . $file->getClientOriginalName();
         $path = $file->storeAs('bukti_pembayaran', $filename, 'public');
 
-        Pembayaran::updateOrCreate(
+        $pembayaran = Pembayaran::updateOrCreate(
             ['id_periksa' => $request->id_periksa],
             [
-                'bukti_pembayaran' => $path,
+                'bukti_pembayaran'  => $path,
                 'status_pembayaran' => 'pending',
-                'tgl_pembayaran' => now(),
+                'tgl_pembayaran'    => now(),
             ]
         );
+
+        // Load relasi Dokter yang memeriksa pasien ini
+        $pembayaran->load(['periksa.daftarPoli.jadwalPeriksa.dokter', 'periksa.daftarPoli.pasien']);
+        $dokter = $pembayaran->periksa->daftarPoli->jadwalPeriksa->dokter ?? null;
+
+        // Kirim Notifikasi ke Dokter terkait
+        if ($dokter) {
+            $dokter->notify(new PembayaranPasienNotification($pembayaran));
+        }
 
         return redirect()->back()->with('success', 'Bukti pembayaran berhasil diunggah. Menunggu verifikasi admin.');
     }
