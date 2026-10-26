@@ -8,13 +8,6 @@
         </div>
     @endif
 
-    @if (session('success'))
-        <div class="alert alert-success mb-6 rounded-xl shadow-sm border border-slate-200">
-            <i class="fas fa-circle-check"></i>
-            <span>{{ session('success') }}</span>
-        </div>
-    @endif
-
     {{-- Banner Antrian Aktif Pasien --}}
     @if ($antrianAktif)
         <div class="bg-gradient-to-r from-blue-700 to-indigo-800 rounded-2xl p-6 text-white shadow-lg mb-8">

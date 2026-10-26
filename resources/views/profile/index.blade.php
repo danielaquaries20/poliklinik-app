@@ -11,14 +11,6 @@
             <h2 class="text-2xl font-bold text-slate-800">Profil Saya</h2>
         </div>
 
-        {{-- Alert Sukses --}}
-        @if (session('success'))
-            <div class="alert alert-success mb-6 rounded-xl shadow-sm border border-slate-200">
-                <i class="fas fa-circle-check"></i>
-                <span>{{ session('success') }}</span>
-            </div>
-        @endif
-
         {{-- Card Utama --}}
         <div class="card bg-base-100 shadow-md rounded-2xl border border-slate-200">
             <div class="card-body p-8">
