@@ -6,11 +6,20 @@
             Data Dokter
         </h2>
 
-        <a href="{{ route('dokter.create') }}" class="inline-flex items-center gap-2 px-5 py-2.5 bg-primary hover:bg-primary/90 
-                  text-white rounded-xl text-sm font-semibold transition">
-            <i class="fas fa-plus text-sm"></i>
-            Tambah Dokter
-        </a>
+        {{-- Kelompokkan tombol di sisi kanan --}}
+        <div class="flex items-center gap-3">
+            <a href="{{ route('admin.dokter.export') }}"
+                class="inline-flex items-center gap-2 px-4 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-sm rounded-xl shadow-sm transition">
+                <i class="fas fa-file-excel"></i>
+                <span>Export Excel</span>
+            </a>
+
+            <a href="{{ route('dokter.create') }}"
+                class="inline-flex items-center gap-2 px-5 py-2.5 bg-primary hover:bg-primary/90 text-white rounded-xl text-sm font-semibold transition">
+                <i class="fas fa-plus text-sm"></i>
+                Tambah Dokter
+            </a>
+        </div>
     </div>
 
     {{-- Card Table --}}
@@ -70,8 +79,8 @@
 
                                         {{-- Edit --}}
                                         <a href="{{ route('dokter.edit', $dokter->id) }}" class="inline-flex items-center gap-1 px-3 py-2 
-                                            bg-amber-500 hover:bg-amber-600 
-                                            text-white rounded-lg text-xs font-semibold transition">
+                                                    bg-amber-500 hover:bg-amber-600 
+                                                    text-white rounded-lg text-xs font-semibold transition">
                                             <i class="fas fa-pen-to-square text-xs"></i>
                                             Edit
                                         </a>
@@ -83,8 +92,8 @@
 
                                             <button type="submit"
                                                 onclick="return confirm('Yakin ingin menghapus dokter ini?')" class="inline-flex items-center gap-1 px-3 py-2 
-                                                 bg-red-500 hover:bg-red-600 
-                                                 text-white rounded-lg text-xs font-semibold transition">
+                                                         bg-red-500 hover:bg-red-600 
+                                                         text-white rounded-lg text-xs font-semibold transition">
                                                 <i class="fas fa-trash text-xs"></i>
                                                 Hapus
                                             </button>

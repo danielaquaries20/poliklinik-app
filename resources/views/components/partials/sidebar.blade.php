@@ -85,6 +85,12 @@
                     <i class="fas fa-file-invoice-dollar w-4 text-center"></i>
                     <span>Verifikasi Pembayaran</span>
                 </a>
+
+                <a href="{{ route('admin.laporan.index') }}"
+                    class="{{ $baseLink }} {{ request()->routeIs('admin.laporan*') ? $active : $inactive }}">
+                    <i class="fas fa-file-excel w-4 text-center"></i>
+                    <span>Laporan Rekapitulasi</span>
+                </a>
             </div>
         @endif
 

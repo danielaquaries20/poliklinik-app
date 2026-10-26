@@ -6,11 +6,19 @@
             Jadwal Periksa
         </h2>
 
-        <a href="{{ route('jadwal-periksa.create') }}" class="btn bg-[#2d4499] hover:bg-[#1e2d6b] 
-                  text-white border-none rounded-lg px-5">
-            <i class="fas fa-plus"></i>
-            Tambah Jadwal Periksa
-        </a>
+        <div class="flex items-center gap-3">
+            <a href="{{ route('dokter.jadwal.export') }}"
+                class="inline-flex items-center gap-2 px-4 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-sm rounded-xl shadow-sm transition">
+                <i class="fas fa-file-excel"></i>
+                <span>Export Excel</span>
+            </a>
+
+            <a href="{{ route('jadwal-periksa.create') }}"
+                class="inline-flex items-center gap-2 px-5 py-2.5 bg-primary hover:bg-primary/90 text-white rounded-xl text-sm font-semibold transition">
+                <i class="fas fa-plus text-sm"></i>
+                Tambah Jadwal
+            </a>
+        </div>
     </div>
 
     {{-- Alert Flash Message --}}
@@ -65,7 +73,7 @@
 
                                         {{-- Edit --}}
                                         <a href="{{ route('jadwal-periksa.edit', $jadwalPeriksa->id) }}" class="btn btn-sm bg-amber-500 hover:bg-amber-600 
-                                                      text-white border-none rounded-lg px-4">
+                                                          text-white border-none rounded-lg px-4">
                                             <i class="fas fa-pen-to-square"></i>
                                             Edit
                                         </a>
@@ -78,7 +86,7 @@
                                             <button type="submit"
                                                 onclick="return confirm('Yakin ingin menghapus Data Jadwal Periksa ini?')"
                                                 class="btn btn-sm bg-red-500 hover:bg-red-600 
-                                                           text-white border-none rounded-lg px-4">
+                                                               text-white border-none rounded-lg px-4">
                                                 <i class="fas fa-trash"></i>
                                                 Hapus
                                             </button>

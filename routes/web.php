@@ -17,6 +17,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Pasien\PembayaranController;
 use App\Http\Controllers\Admin\VerifikasiPembayaranController;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\Admin\LaporanController;
 
 
 Route::get('/', function () {
@@ -35,12 +36,19 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
         return view('admin.dashboard');
     })->name('admin.dashboard');
 
+    Route::get('/dokter/export-excel', [DokterController::class, 'exportExcel'])->name('admin.dokter.export');
+    Route::get('/pasien/export-excel', [PasienController::class, 'exportExcel'])->name('admin.pasien.export');
+    Route::get('/obat/export-excel', [ObatController::class, 'exportExcel'])->name('admin.obat.export');
+    Route::get('/laporan/export-excel', [LaporanController::class, 'exportExcel'])->name('admin.laporan.export');
+
     Route::resource('polis', AdminPoliController::class);
     Route::resource('dokter', DokterController::class);
     Route::resource('pasien', PasienController::class);
     Route::resource('obat', ObatController::class);
     Route::get('/verifikasi-pembayaran', [VerifikasiPembayaranController::class, 'index'])->name('admin.verifikasi.index');
     Route::post('/verifikasi-pembayaran/{id}', [VerifikasiPembayaranController::class, 'verifikasi'])->name('admin.verifikasi.konfirmasi');
+    Route::get('/laporan', [LaporanController::class, 'index'])->name('admin.laporan.index');
+
 });
 
 Route::middleware(['auth', 'role:pasien'])->prefix('pasien')->group(function () {
@@ -69,6 +77,9 @@ Route::middleware(['auth', 'role:dokter'])->prefix('dokter')->group(function () 
     Route::get('/dashboard', function () {
         return view('dokter.dashboard');
     })->name('dokter.dashboard');
+
+    Route::get('/jadwal-periksa/export-excel', [JadwalPeriksaController::class, 'exportExcel'])->name('dokter.jadwal.export');
+    Route::get('/riwayat-pasien/export-excel', [RiwayatPasienController::class, 'exportExcel'])->name('dokter.riwayat.export');
 
     Route::resource('jadwal-periksa', JadwalPeriksaController::class);
 

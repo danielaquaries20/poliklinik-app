@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Obat;
 use Illuminate\Http\Request;
+use App\Exports\DataObatExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ObatController extends Controller
 {
@@ -76,5 +78,10 @@ class ObatController extends Controller
             ->route('obat.index')
             ->with('message', 'Data Obat berhasil di Hapus')
             ->with('type', 'success');
+    }
+
+    public function exportExcel()
+    {
+        return Excel::download(new DataObatExport, 'data-obat-' . now()->format('Y-m-d') . '.xlsx');
     }
 }

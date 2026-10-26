@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Periksa;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Exports\RiwayatPasienDokterExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class RiwayatPasienController extends Controller
 {
@@ -33,5 +35,10 @@ class RiwayatPasienController extends Controller
                 ])->findOrFail($id);
 
         return view('dokter.riwayat-pasien.show', compact('periksa'));
+    }
+
+    public function exportExcel()
+    {
+        return Excel::download(new RiwayatPasienDokterExport, 'riwayat-pasien-diperiksa-' . now()->format('Y-m-d') . '.xlsx');
     }
 }

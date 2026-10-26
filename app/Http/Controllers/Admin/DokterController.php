@@ -7,6 +7,8 @@ use App\Models\Poli;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use App\Exports\DataDokterExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class DokterController extends Controller
 {
@@ -95,5 +97,10 @@ class DokterController extends Controller
         return redirect()->route('dokter.index')
             ->with('message', 'Data Dokter Berhasil dihapus')
             ->with('type', 'success');
+    }
+
+    public function exportExcel()
+    {
+        return Excel::download(new DataDokterExport, 'data-dokter-' . now()->format('Y-m-d') . '.xlsx');
     }
 }
