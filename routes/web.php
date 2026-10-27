@@ -52,15 +52,6 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
 });
 
 Route::middleware(['auth', 'role:pasien'])->prefix('pasien')->group(function () {
-    // Route::get('/dashboard', function () {
-    //     return view('pasien.dashboard');
-    // })->name('pasien.dashboard');
-
-    // Route::get('/daftar', [PoliController::class, 'get'])->name('pasien.daftar');
-
-    // Route::post('/daftar', [PoliController::class, 'submit'])
-    //     ->name('pasien.daftar.submit');
-
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('pasien.dashboard');
     Route::get('/daftar', [PoliController::class, 'get'])->name('pasien.daftar');
     Route::post('/daftar', [PoliController::class, 'submit'])->name('pasien.daftar.submit');
