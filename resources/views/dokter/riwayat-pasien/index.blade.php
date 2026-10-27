@@ -5,14 +5,6 @@
         <h2 class="text-2xl font-bold text-slate-800">
             Riwayat Pasien
         </h2>
-
-        <div class="flex items-center gap-3">
-            <a href="{{ route('dokter.riwayat.export') }}"
-                class="inline-flex items-center gap-2 px-4 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-sm rounded-xl shadow-sm transition">
-                <i class="fas fa-file-excel"></i>
-                <span>Export Excel</span>
-            </a>
-        </div>
     </div>
 
     {{-- Card --}}
@@ -61,8 +53,8 @@
 
                                 <td class="px-6 py-4 text-right">
                                     <a href="{{ route('riwayat-pasien.show', $riwayat) }}"
-                                        class="inline-flex items-center gap-1.5 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold rounded-lg transition shadow-sm">
-                                        <i class="fas fa-eye text-xs"></i>
+                                        class="btn btn-sm bg-blue-500 hover:bg-blue-600 text-white border-none rounded-lg px-4">
+                                        <i class="fas fa-eye"></i>
                                         Detail
                                     </a>
                                 </td>

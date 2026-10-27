@@ -10,6 +10,8 @@ use App\Models\Periksa;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Events\AntrianUpdated;
+use App\Events\AntrianSelesaiEvent;
+use Throwable;
 
 class PeriksaPasienController extends Controller
 {
@@ -76,6 +78,7 @@ class PeriksaPasienController extends Controller
 
             try {
                 broadcast(new AntrianUpdated($daftarPoli->id_jadwal, 0));
+                broadcast(new AntrianSelesaiEvent($daftarPoli->id_pasien));
             } catch (Throwable $e) {
                 // Log/abaikan error broadcast
             }

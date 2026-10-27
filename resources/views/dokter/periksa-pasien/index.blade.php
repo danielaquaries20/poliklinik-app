@@ -1,13 +1,5 @@
 <x-layouts.app title="Periksa Pasien">
 
-    {{-- Alert Notifikasi --}}
-    @if (session('success'))
-        <div class="alert alert-success mb-6 rounded-xl shadow-sm border border-slate-200">
-            <i class="fas fa-circle-check"></i>
-            <span>{{ session('success') }}</span>
-        </div>
-    @endif
-
     {{-- Header --}}
     <div class="flex items-center justify-between mb-6">
         <h2 class="text-2xl font-bold text-slate-800">
