@@ -13,13 +13,15 @@ class RiwayatPasienController extends Controller
 {
     public function index()
     {
+        // 1. Menggunakan paginate(10) agar tombol navigasi aktif
         $riwayatPasien = Periksa::whereHas('daftarPoli.jadwalPeriksa', function ($query) {
             $query->where('id_dokter', Auth::id());
         })->with([
                     'daftarPoli.pasien',
                     'daftarPoli.jadwalPeriksa.dokter',
                     'detailPeriksas.obat'
-                ])->orderBy('tgl_periksa', 'desc')->get();
+                ])->orderBy('tgl_periksa', 'desc')
+            ->paginate(10);
 
         return view('dokter.riwayat-pasien.index', compact('riwayatPasien'));
     }
@@ -34,7 +36,10 @@ class RiwayatPasienController extends Controller
                     'detailPeriksas.obat'
                 ])->findOrFail($id);
 
-        return view('dokter.riwayat-pasien.show', compact('periksa'));
+        // 2. Menghitung jumlah obat dari relasi detailPeriksas
+        $jumlahObat = $periksa->detailPeriksas ? $periksa->detailPeriksas->count() : 0;
+
+        return view('dokter.riwayat-pasien.show', compact('periksa', 'jumlahObat'));
     }
 
     public function exportExcel()

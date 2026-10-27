@@ -69,6 +69,14 @@
             <div class="card-body p-0">
                 <div class="px-6 py-4 border-b border-slate-200">
                     <h3 class="font-bold text-slate-800">Obat yang Diresepkan</h3>
+
+                    {{-- Badge Total Obat --}}
+                    <br>
+                    <span
+                        class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-blue-100 text-blue-700 border border-blue-200 shadow-sm">
+                        <i class="fas fa-pills text-xs"></i>
+                        <span>{{ $jumlahObat }} obat diresepkan</span>
+                    </span>
                 </div>
                 <div class="p-0">
                     @if($periksa->detailPeriksas && $periksa->detailPeriksas->count() > 0)

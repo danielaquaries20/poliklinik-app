@@ -12,14 +12,14 @@ class RiwayatPendaftaranController extends Controller
     {
         $pasienId = Auth::id();
 
-        // Mengambil seluruh histori pendaftaran pasien dengan Eager Loading (Cegah N+1 Query)
+        // 1. Menggunakan paginate(10) sebagai pengganti get()
         $riwayats = DaftarPoli::with([
             'jadwalPeriksa.dokter.poli',
             'periksas'
         ])
             ->where('id_pasien', $pasienId)
             ->latest()
-            ->get();
+            ->paginate(10);
 
         return view('pasien.riwayat-pendaftaran.index', compact('riwayats'));
     }
@@ -28,7 +28,6 @@ class RiwayatPendaftaranController extends Controller
     {
         $pasienId = Auth::id();
 
-        // Mengambil detail pendaftaran spesifik milik pasien yang sedang login
         $daftarPoli = DaftarPoli::with([
             'jadwalPeriksa.dokter.poli',
             'periksas.detailPeriksas.obat'
@@ -38,6 +37,9 @@ class RiwayatPendaftaranController extends Controller
 
         $periksa = $daftarPoli->periksas->first();
 
-        return view('pasien.riwayat-pendaftaran.show', compact('daftarPoli', 'periksa'));
+        // 2. Menghitung jumlah obat yang diresepkan dari relasi detailPeriksas menggunakan count()
+        $jumlahObat = $periksa ? $periksa->detailPeriksas->count() : 0;
+
+        return view('pasien.riwayat-pendaftaran.show', compact('daftarPoli', 'periksa', 'jumlahObat'));
     }
 }

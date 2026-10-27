@@ -33,7 +33,7 @@
                             <tr class="border-t border-slate-100 hover:bg-slate-50 transition">
 
                                 <td class="px-6 py-4 text-slate-500">
-                                    {{ $loop->iteration }}
+                                    {{ $riwayats->firstItem() + $loop->index }}
                                 </td>
 
                                 <td class="px-6 py-4 font-semibold text-slate-800">
@@ -98,6 +98,11 @@
                     </tbody>
 
                 </table>
+            </div>
+
+            {{-- Navigasi Pagination --}}
+            <div class="px-6 py-4 border-t border-slate-100">
+                {{ $riwayats->links() }}
             </div>
 
         </div>
